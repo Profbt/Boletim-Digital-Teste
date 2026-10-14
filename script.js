@@ -225,9 +225,11 @@ async function conectar(evento) {
   estado.textContent = "Conectando...";
   try {
     const resposta = await requisitar("/api/v1/boletins/abrir", "POST", { ...selecao, pin });
-    if (resposta.novo === true && resposta.dados === null) {
+    if ((resposta.novo === true || resposta.novo === false) && resposta.dados === null) {
       dadosAtuais = dadosIniciais();
-      document.getElementById("origemDados").textContent = "Boletim novo — usando dados iniciais de teste (ainda não salvos)";
+      document.getElementById("origemDados").textContent = resposta.novo
+        ? "Boletim novo — usando dados iniciais de teste (ainda não salvos)"
+        : "Boletim sem dados salvos — usando dados iniciais de teste";
     } else if (resposta.novo === false && dadosValidos(resposta.dados)) {
       dadosAtuais = JSON.parse(JSON.stringify(resposta.dados));
       document.getElementById("origemDados").textContent = "Dados carregados da API";
