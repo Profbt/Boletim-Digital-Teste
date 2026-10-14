@@ -9,24 +9,43 @@ function gerarPin(numeroChamada) {
   return `2026${String(numeroChamada).padStart(2, "0")}`;
 }
 
-/* Modelo fictício do laboratório; nunca substitui dados já salvos na API. */
-const dadosBrutos = [
-  { disciplina: "Língua Portuguesa",           tri1: 78, tri2: 15,  tri3: null, faltas: [5, 7, 0] },
-  { disciplina: "Matemática",                  tri1: 75, tri2: 51,  tri3: null, faltas: [6, 8, 0] },
-  { disciplina: "Ciências",                    tri1: 75, tri2: 25,  tri3: null, faltas: [2, 5, 0] },
-  { disciplina: "História",                    tri1: 75, tri2: 98,  tri3: null, faltas: [9, 1, 0] },
-  { disciplina: "Geografia",                   tri1: 75, tri2: 68,  tri3: null, faltas: [8, 3, 0] },
-  { disciplina: "Língua Inglesa",              tri1: 75, tri2: 75,  tri3: null, faltas: [4, 8, 0] },
-  { disciplina: "Arte",                        tri1: 75, tri2: 84,  tri3: null, faltas: [65, 50, 0] },
-  { disciplina: "Educação Física",             tri1: 75, tri2: 98,  tri3: null, faltas: [8, 65, 0] },
-  { disciplina: "Educação Digital",            tri1: 75, tri2: 100, tri3: null, faltas: [45, 8, 0] },
-  { disciplina: "Educação Financeira",         tri1: 75, tri2: 59,  tri3: null, faltas: [5, 5, 0] },
-  { disciplina: "Estudo Orientado",            tri1: 75, tri2: 65,  tri3: null, faltas: [2, 6, 0] },
-  { disciplina: "Redação e Leitura",           tri1: 75, tri2: 77,  tri3: null, faltas: [3, 2, 0] },
-  { disciplina: "Pensamento Lógico",           tri1: 75, tri2: 72,  tri3: null, faltas: [0, 3, 0] },
-  { disciplina: "Literatura Arte e Movimento", tri1: 78, tri2: 88,  tri3: null, faltas: [1, 2, 0] },
-  { disciplina: "Práticas Experimentais",      tri1: 55, tri2: 71,  tri3: null, faltas: [4, 1, 0] }
-];
+/* Modelos fictícios do laboratório; nunca substituem dados já salvos na API. */
+const TEMPLATES = {
+  8: [
+    { disciplina: "Língua Portuguesa",           tri1: 78, tri2: 15,  tri3: null, faltas: [5, 7, 0] },
+    { disciplina: "Matemática",                  tri1: 75, tri2: 51,  tri3: null, faltas: [6, 8, 0] },
+    { disciplina: "Ciências",                    tri1: 75, tri2: 25,  tri3: null, faltas: [2, 5, 0] },
+    { disciplina: "História",                    tri1: 75, tri2: 98,  tri3: null, faltas: [9, 1, 0] },
+    { disciplina: "Geografia",                   tri1: 75, tri2: 68,  tri3: null, faltas: [8, 3, 0] },
+    { disciplina: "Língua Inglesa",              tri1: 75, tri2: 75,  tri3: null, faltas: [4, 8, 0] },
+    { disciplina: "Arte",                        tri1: 75, tri2: 84,  tri3: null, faltas: [65, 50, 0] },
+    { disciplina: "Educação Física",             tri1: 75, tri2: 98,  tri3: null, faltas: [8, 65, 0] },
+    { disciplina: "Educação Digital",            tri1: 75, tri2: 100, tri3: null, faltas: [45, 8, 0] },
+    { disciplina: "Educação Financeira",         tri1: 75, tri2: 59,  tri3: null, faltas: [5, 5, 0] },
+    { disciplina: "Estudo Orientado",            tri1: 75, tri2: 65,  tri3: null, faltas: [2, 6, 0] },
+    { disciplina: "Redação e Leitura",           tri1: 75, tri2: 77,  tri3: null, faltas: [3, 2, 0] },
+    { disciplina: "Pensamento Lógico",           tri1: 75, tri2: 72,  tri3: null, faltas: [0, 3, 0] },
+    { disciplina: "Literatura Arte e Movimento", tri1: 78, tri2: 88,  tri3: null, faltas: [1, 2, 0] },
+    { disciplina: "Práticas Experimentais",      tri1: 55, tri2: 71,  tri3: null, faltas: [4, 1, 0] }
+  ],
+  9: [
+    { disciplina: "Língua Portuguesa", tri1: 78, tri2: "8,2", tri3: 8.6, faltas: [2, 2, 1] },
+    { disciplina: "Matemática", tri1: 55, tri2: "5,4", tri3: null, faltas: [3, 2, 2] },
+    { disciplina: "Ciências", tri1: 84, tri2: 7.9, tri3: "8,3", faltas: [1, 1, 1] },
+    { disciplina: "História", tri1: "7,1", tri2: 82, tri3: null, faltas: [1, 2, 1] },
+    { disciplina: "Geografia", tri1: 69, tri2: "7,5", tri3: 7.8, faltas: [0, 1, 1] },
+    { disciplina: "Língua Inglesa", tri1: 88, tri2: 8.4, tri3: null, faltas: [1, 0, 1] },
+    { disciplina: "Arte", tri1: "9,2", tri2: 87, tri3: 9.0, faltas: [1, 1, 0] },
+    { disciplina: "Educação Física", tri1: 96, tri2: "9,3", tri3: null, faltas: [0, 1, 0] },
+    { disciplina: "Educação Digital", tri1: 91, tri2: 8.9, tri3: "9,4", faltas: [1, 1, 0] },
+    { disciplina: "Educação Financeira", tri1: 76, tri2: "7,2", tri3: null, faltas: [1, 1, 1] },
+    { disciplina: "Rec. Aprend. Matemática", tri1: 58, tri2: "5,9", tri3: 6.2, faltas: [2, 2, 1] },
+    { disciplina: "Leitura Rec. Aprend. Lingua Portuguesa", tri1: 72, tri2: "7,6", tri3: null, faltas: [2, 1, 1] },
+    { disciplina: "Pensamento Lógico", tri1: 49, tri2: 5.5, tri3: "5,8", faltas: [2, 2, 2] },
+    { disciplina: "Literatura Arte e Movimento", tri1: "8,0", tri2: 84, tri3: null, faltas: [1, 1, 0] },
+    { disciplina: "Práticas Experimentais", tri1: 64, tri2: "6,6", tri3: 7.0, faltas: [1, 1, 1] }
+  ]
+};
 
 const FREQUENCIA_DEMONSTRATIVA = 92;
 let sessaoAtual = null;
@@ -58,9 +77,18 @@ function formatarNota(nota) {
   return nota === null ? "—" : nota.toFixed(1).replace(".", ",");
 }
 
-function dadosIniciais() {
+function serieDaTurma(turma) {
+  if (/^8[A-Z0-9]*$/.test(turma)) return 8;
+  if (/^9[A-Z0-9]*$/.test(turma)) return 9;
+  return null;
+}
+
+function dadosIniciais(turma) {
+  const serie = serieDaTurma(turma);
+  const template = TEMPLATES[serie];
+  if (!template) return null;
   return {
-    disciplinas: dadosBrutos.map((item) => ({
+    disciplinas: template.map((item) => ({
       disciplina: item.disciplina,
       tri1: normalizarNota(item.tri1),
       tri2: normalizarNota(item.tri2),
@@ -185,6 +213,7 @@ function atualizarPainelTeste() {
 }
 
 function mensagemErro(erro) {
+  if (erro.serieIndisponivel) return "Não foi possível identificar o ano pela turma. Use uma turma do 8º ou 9º ano.";
   if (erro.status === 401) return "Turma, chamada ou PIN inválidos.";
   if (erro.status === 429) return "Muitas tentativas. Aguarde um minuto e tente novamente.";
   if (erro.status === 400 || erro.status === 422 || erro.dadosInvalidos) return "Dados inválidos. Confira os campos e tente novamente.";
@@ -225,21 +254,26 @@ async function conectar(evento) {
   estado.textContent = "Conectando...";
   try {
     const resposta = await requisitar("/api/v1/boletins/abrir", "POST", { ...selecao, pin });
-    if ((resposta.novo === true || resposta.novo === false) && resposta.dados === null) {
-      dadosAtuais = dadosIniciais();
-      document.getElementById("origemDados").textContent = resposta.novo
-        ? "Boletim novo — usando dados iniciais de teste (ainda não salvos)"
-        : "Boletim sem dados salvos — usando dados iniciais de teste";
-    } else if (resposta.novo === false && dadosValidos(resposta.dados)) {
+    if (dadosValidos(resposta.dados) && (resposta.novo === true || resposta.novo === false)) {
       dadosAtuais = JSON.parse(JSON.stringify(resposta.dados));
       document.getElementById("origemDados").textContent = "Dados carregados da API";
+    } else if ((resposta.novo === true || resposta.novo === false) && resposta.dados === null) {
+      const serie = serieDaTurma(selecao.turma);
+      const iniciais = dadosIniciais(selecao.turma);
+      if (!iniciais) throw { serieIndisponivel: true };
+      dadosAtuais = iniciais;
+      document.getElementById("origemDados").textContent = resposta.novo
+        ? `Boletim novo — usando modelo fictício do ${serie}º ano (ainda não salvo)`
+        : `Boletim sem dados salvos — usando modelo fictício do ${serie}º ano`;
     } else {
       throw { dadosInvalidos: true };
     }
     sessaoAtual = { ...selecao, pin };
     pinInput.value = "";
     estado.textContent = "";
-    document.getElementById("conexaoAtual").textContent = `Conectado: ${selecao.turma} — chamada ${selecao.numero_chamada}`;
+    const ano = serieDaTurma(selecao.turma);
+    document.getElementById("conexaoAtual").textContent =
+      `Conectado: ${selecao.turma} — chamada ${selecao.numero_chamada}${ano ? ` — ${ano}º ano` : ""}`;
     document.getElementById("estadoSalvamento").textContent = "";
     document.getElementById("painelTeste").hidden = true;
     document.getElementById("boletimConteudo").hidden = false;
