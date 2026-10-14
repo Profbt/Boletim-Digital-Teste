@@ -7,63 +7,95 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <header class="cabecalho">
     <h1>Boletim Digital — Ambiente de Teste</h1>
-    <p class="subtitulo">Ano letivo 2026 — dados fictícios</p>
+    <p class="subtitulo">Ano letivo 2026 — ambiente de laboratório</p>
   </header>
 
   <main class="conteudo">
-
-    <section class="painel-teste" aria-labelledby="tituloConfiguracao">
+    <section class="painel-teste" id="painelTeste" aria-labelledby="tituloConfiguracao">
       <h2 id="tituloConfiguracao">Configuração de teste</h2>
-      <p class="painel-aviso">Apenas para o professor. O PIN é exibido somente neste laboratório público; não é autenticação.</p>
-      <div class="campos-teste">
-        <div class="campo-teste">
-          <label for="turmaTeste">Turma</label>
-          <input id="turmaTeste" type="text" value="8C" maxlength="10" pattern="[A-Za-z0-9]{1,10}" autocomplete="off" aria-describedby="erroConfiguracao" />
+      <p class="painel-aviso">Apenas para o professor. O PIN esperado é exibido neste laboratório público; não é autenticação segura.</p>
+      <form id="formConectar" novalidate>
+        <div class="campos-teste">
+          <div class="campo-teste">
+            <label for="turmaTeste">Turma</label>
+            <input id="turmaTeste" type="text" value="8C" maxlength="10" pattern="[A-Za-z0-9]{1,10}" autocomplete="off" aria-describedby="erroConfiguracao" />
+          </div>
+          <div class="campo-teste">
+            <label for="chamadaTeste">Número de chamada</label>
+            <input id="chamadaTeste" type="text" value="17" inputmode="numeric" maxlength="2" autocomplete="off" aria-describedby="erroConfiguracao" />
+          </div>
+          <div class="campo-teste">
+            <label for="pinTeste">PIN</label>
+            <input id="pinTeste" type="password" inputmode="numeric" maxlength="6" autocomplete="off" aria-describedby="erroConfiguracao" />
+          </div>
         </div>
-        <div class="campo-teste">
-          <label for="chamadaTeste">Número de chamada</label>
-          <input id="chamadaTeste" type="text" value="17" inputmode="numeric" maxlength="2" autocomplete="off" aria-describedby="erroConfiguracao" />
+        <p id="erroConfiguracao" class="erro-teste" role="alert"></p>
+        <div class="resultado-teste" aria-live="polite">
+          <p>Turma: <strong id="turmaAtual"></strong></p>
+          <p>Chamada: <strong id="chamadaAtual"></strong></p>
+          <p>Identificador: <strong id="identificadorAtual"></strong></p>
+          <p>PIN esperado: <strong id="pinEsperado"></strong></p>
         </div>
-      </div>
-      <p id="erroConfiguracao" class="erro-teste" role="alert"></p>
-      <div class="resultado-teste" aria-live="polite">
-        <p>Turma: <strong id="turmaAtual"></strong></p>
-        <p>Chamada: <strong id="chamadaAtual"></strong></p>
-        <p>Identificador: <strong id="identificadorAtual"></strong></p>
-        <p>PIN esperado: <strong id="pinEsperado"></strong></p>
-      </div>
+        <div class="acoes-painel">
+          <button class="botao botao-primario" id="botaoConectar" type="submit">Conectar ao boletim</button>
+          <p id="estadoConexao" class="mensagem" role="status" aria-live="polite"></p>
+        </div>
+      </form>
     </section>
 
-    <section class="cards-resumo" id="cardsResumo"></section>
+    <div id="boletimConteudo" hidden>
+      <section class="painel-conectado" aria-labelledby="conexaoAtual">
+        <div>
+          <h2 id="conexaoAtual"></h2>
+          <p id="origemDados" class="origem-dados"></p>
+          <p id="estadoSalvamento" class="mensagem" role="status" aria-live="polite"></p>
+        </div>
+        <div class="acoes-painel">
+          <button class="botao botao-primario" id="botaoAlterar" type="button">Alterar dados</button>
+          <button class="botao botao-secundario" id="botaoTrocar" type="button">Trocar boletim</button>
+        </div>
+      </section>
 
-    <section class="area-tabela">
-      <h2>Notas por disciplina</h2>
+      <section class="cards-resumo" id="cardsResumo" aria-label="Resumo do boletim"></section>
+      <section class="area-tabela">
+        <h2>Notas por disciplina</h2>
+        <div class="tabela-responsiva">
+          <table class="tabela-boletim">
+            <thead>
+              <tr>
+                <th>Disciplina</th>
+                <th>1º Tri</th>
+                <th>2º Tri</th>
+                <th>3º Tri</th>
+                <th>Média</th>
+                <th>Faltas</th>
+                <th>Situação</th>
+              </tr>
+            </thead>
+            <tbody id="corpoTabela"></tbody>
+          </table>
+        </div>
+      </section>
 
-      <div class="tabela-responsiva">
-        <table class="tabela-boletim">
-          <thead>
-            <tr>
-              <th>Disciplina</th>
-              <th>1º Tri</th>
-              <th>2º Tri</th>
-              <th>3º Tri</th>
-              <th>Média</th>
-              <th>Faltas</th>
-              <th>Situação</th>
-            </tr>
-          </thead>
-          <tbody id="corpoTabela"></tbody>
-        </table>
-      </div>
-    </section>
-
+      <section class="editor" id="painelEditor" aria-labelledby="tituloEditor" hidden>
+        <h2 id="tituloEditor">Alterar dados</h2>
+        <p class="painel-aviso">Notas de 0 a 10; deixe em branco quando ainda não houver nota. Faltas devem ser números inteiros não negativos.</p>
+        <form id="formEditar" novalidate>
+          <div id="linhasEditor" class="linhas-editor"></div>
+          <p id="erroEditor" class="erro-teste" role="alert"></p>
+          <div class="acoes-painel">
+            <button class="botao botao-primario" id="botaoSalvar" type="submit">Salvar alterações</button>
+            <button class="botao botao-secundario" id="botaoCancelar" type="button">Cancelar</button>
+          </div>
+        </form>
+      </section>
+    </div>
   </main>
 
   <footer class="rodape">
-    <p>Ambiente de teste do projeto Boletim Digital.</p>
+    <p>Ambiente de teste do projeto Boletim Digital. Frequência exibida apenas para demonstração.</p>
   </footer>
 
   <script src="script.js"></script>
