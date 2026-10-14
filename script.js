@@ -1,6 +1,54 @@
 /* =========================================================
-   BOLETIM DIGITAL — 8º ANO
+   BOLETIM DIGITAL — AMBIENTE DE TESTE
    ========================================================= */
+
+const CONFIG = {
+  anoLetivo: 2026,
+  apiUrl: "",
+  modoTeste: true
+};
+
+// Dados fictícios locais; futuramente a origem dos dados será a API.
+function gerarPin(numeroChamada) {
+  return `2026${String(numeroChamada).padStart(2, "0")}`;
+}
+
+function configurarPainelTeste() {
+  const turmaInput = document.getElementById("turmaTeste");
+  const chamadaInput = document.getElementById("chamadaTeste");
+  const erro = document.getElementById("erroConfiguracao");
+  const campos = ["turmaAtual", "chamadaAtual", "identificadorAtual", "pinEsperado"]
+    .map((id) => document.getElementById(id));
+
+  function atualizar() {
+    const turma = turmaInput.value.trim().toUpperCase();
+    const chamadaTexto = chamadaInput.value.trim();
+    const turmaValida = /^[A-Z0-9]{1,10}$/.test(turma);
+    const chamada = Number(chamadaTexto);
+    const chamadaValida = /^\d{1,2}$/.test(chamadaTexto) && chamada >= 1 && chamada <= 50;
+
+    turmaInput.setAttribute("aria-invalid", String(!turmaValida));
+    chamadaInput.setAttribute("aria-invalid", String(!chamadaValida));
+
+    if (!turmaValida || !chamadaValida) {
+      erro.textContent = !turmaValida
+        ? "Informe uma turma com 1 a 10 letras ou números."
+        : "A chamada deve ser um número inteiro de 1 a 50.";
+      campos.forEach((campo) => { campo.textContent = "—"; });
+      return;
+    }
+
+    erro.textContent = "";
+    campos[0].textContent = turma;
+    campos[1].textContent = String(chamada);
+    campos[2].textContent = `${turma}-${chamada}`;
+    campos[3].textContent = gerarPin(chamada);
+  }
+
+  turmaInput.addEventListener("input", atualizar);
+  chamadaInput.addEventListener("input", atualizar);
+  atualizar();
+}
 
 /* -------- DADOS BRUTOS --------
    tri1 = 1º trimestre
@@ -201,5 +249,6 @@ function montarCards() {
 }
 
 /* -------- INICIAR TUDO -------- */
+configurarPainelTeste();
 montarCards();
 montarTabela();

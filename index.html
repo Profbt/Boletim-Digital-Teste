@@ -3,17 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Boletim Digital</title>
+  <title>Boletim Digital — Ambiente de Teste</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <header class="cabecalho">
-    <h1>Boletim Digital</h1>
-    <p class="subtitulo">8º Ano — Estudante Exemplo</p>
+    <h1>Boletim Digital — Ambiente de Teste</h1>
+    <p class="subtitulo">Ano letivo 2026 — dados fictícios</p>
   </header>
 
   <main class="conteudo">
+
+    <section class="painel-teste" aria-labelledby="tituloConfiguracao">
+      <h2 id="tituloConfiguracao">Configuração de teste</h2>
+      <p class="painel-aviso">Apenas para o professor. O PIN é exibido somente neste laboratório público; não é autenticação.</p>
+      <div class="campos-teste">
+        <div class="campo-teste">
+          <label for="turmaTeste">Turma</label>
+          <input id="turmaTeste" type="text" value="8C" maxlength="10" pattern="[A-Za-z0-9]{1,10}" autocomplete="off" aria-describedby="erroConfiguracao" />
+        </div>
+        <div class="campo-teste">
+          <label for="chamadaTeste">Número de chamada</label>
+          <input id="chamadaTeste" type="text" value="17" inputmode="numeric" maxlength="2" autocomplete="off" aria-describedby="erroConfiguracao" />
+        </div>
+      </div>
+      <p id="erroConfiguracao" class="erro-teste" role="alert"></p>
+      <div class="resultado-teste" aria-live="polite">
+        <p>Turma: <strong id="turmaAtual"></strong></p>
+        <p>Chamada: <strong id="chamadaAtual"></strong></p>
+        <p>Identificador: <strong id="identificadorAtual"></strong></p>
+        <p>PIN esperado: <strong id="pinEsperado"></strong></p>
+      </div>
+    </section>
 
     <section class="cards-resumo" id="cardsResumo"></section>
 
@@ -41,7 +63,7 @@
   </main>
 
   <footer class="rodape">
-    <p>Projeto escolar — dados fictícios para demonstração.</p>
+    <p>Ambiente de teste do projeto Boletim Digital.</p>
   </footer>
 
   <script src="script.js"></script>
